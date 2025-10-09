@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CG Certification Practice Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+    h1 { text-align: center; }
+    .question { font-size: 1.1em; margin-bottom: 15px; }
+    .options { list-style: none; padding: 0; }
+    .options li { margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 1em; margin-top: 15px; }
+    .feedback { margin-top: 10px; font-weight: bold; }
+    .explanation { margin-top: 10px; color: #555; }
+    .score { font-size: 1.2em; margin-top: 20px; text-align: center; }
+    .progress { margin-bottom: 20px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CG Certification Practice Quiz</h1>
+    <div id="quiz"></div>
+    <div class="score" id="score"></div>
+    <button id="nextBtn" style="display:none;">Next Question</button>
+    <button id="restartBtn" style="display:none;">Restart Quiz</button>
+  </div>
+  <script>
+    // All questions from your file. To amend, just edit this array!
+   const questions = [
+    {
+        question: "A sales operations manager wants every new retail store onboarding to automatically trigger a predefined sequence of tasks, such as “Initial Stock Check” and “Display Setup.” What is the best configuration?",
+        options: [
+        "Create manual task lists each time a store is onboarded",
+        "Configure Action Plan Templates linked to store onboarding records to auto-generate tasks",
+        "Use free-text notes in store records to track required steps",
+        "Ask reps to remember onboarding steps during visits"
+        ],
+        answer: 1,
+        explanation: "Action Plan Templates automate task creation, ensuring consistency and compliance. Manual task lists, free-text notes, or memory-based tracking are error-prone and non-scalable."
+    },
+    {
+        question: "A manager wants specific compliance checks added automatically for all new promotions, ensuring reps validate shelf placement, pricing, and signage every time. What is the best solution?",
+        options: [
+        "Build a static checklist document for reps",
+        "Use Action Plans linked to new promotion records to auto-generate compliance tasks",
+        "Require reps to create their own tasks per promotion",
+        "Track compliance informally via calls and emails"
+        ],
+        answer: 1,
+        explanation: "Linking Action Plans to promotion creation ensures standardized compliance tasks are generated automatically. Static documents, rep-created tasks, or informal tracking lack automation and governance."
+    },
+    {
+        question: "A territory lead needs to create region-specific action plans because stores in urban areas require additional merchandising steps compared to rural stores. What is the most efficient approach?",
+        options: [
+        "Use one generic Action Plan for all stores regardless of region",
+        "Add additional steps manually for urban stores each time",
+        "Configure multiple Action Plan Templates segmented by region type",
+        "Ask reps to add missing tasks during visits"
+        ],
+        answer: 2,
+        explanation: "Regional-specific templates provide automation and standardization while reducing manual work. Generic plans, manual additions, or rep-dependent changes increase error risk and complexity."
+    },
+    {
+        question: "A field manager wants to automate seasonal tasks like “Holiday Display Setup” and “Special Stock Audit” for specific date ranges. How should this be handled?",
+        options: [
+        "Have reps create seasonal tasks when they remember",
+        "Track seasonal tasks in a separate spreadsheet",
+        "Use Action Plan Templates with date-based triggers to automatically schedule seasonal tasks",
+        "Use optional visit notes to remind reps"
+        ],
+        answer: 2,
+        explanation: "Date-based Action Plan Templates automate seasonal work and ensure timeliness. Manual reminders, spreadsheets, or optional notes lack control and reporting."
+    },
+    {
+        question: "A sales director wants to track completion of critical compliance tasks for every new key account onboarding and generate escalation if tasks are missed. What configuration should be used?",
+        options: [
+        "Ask supervisors to review compliance manually",
+        "Use Action Plans with milestone tracking and reporting to monitor compliance task completion",
+        "Depend on monthly check-ins for missed tasks",
+        "Add ad hoc tasks only when issues occur"
+        ],
+        answer: 1,
+        explanation: "Action Plans with milestone tracking provide visibility, automation, and reporting on critical tasks, unlike manual review or ad hoc task creation, which is reactive."
+    },
+    {
+        question: "A product launch team wants reps to execute specific merchandising and training tasks during the first two weeks of launch and then automatically transition to maintenance tasks after. What is the best approach?",
+        options: [
+        "Use one static task list for the entire launch period",
+        "Ask reps to manually switch from launch tasks to maintenance tasks",
+        "Create phased Action Plan Templates with timeline-based triggers",
+        "Track maintenance activities separately in Excel"
+        ],
+        answer: 2,
+        explanation: "Phased templates ensure automation and proper task sequencing, unlike static lists, manual transitions, or offline tracking that risk incomplete execution."
+    },
+    {
+        question: "A compliance officer requires separate review steps for safety audits that differ from standard store visit tasks. How should this be implemented?",
+        options: [
+        "Use the same Action Plan for all audits",
+        "Add safety steps manually every time an audit occurs",
+        "Require reps to note safety audits in free text",
+        "Create a dedicated Safety Audit Action Plan Template with unique tasks"
+        ],
+        answer: 3,
+        explanation: "A dedicated template ensures structured and repeatable safety audit tasks. Generic plans, manual additions, or free-text entries risk inconsistent compliance and missed steps."
+    },
+    {
+        question: "A CPG company wants to create a separate “New Product Education” action plan exclusively for reps visiting flagship stores during launch events. What’s the best setup?",
+        options: [
+        "Add education tasks to the standard visit template",
+        "Use free-text instructions in rep notes",
+        "Depend on email reminders for education tasks",
+        "Create a dedicated Action Plan Template linked to flagship store visits during launch events"
+        ],
+        answer: 3,
+        explanation: "Dedicated templates ensure structured education tasks for flagship launches, unlike generic templates, notes, or email reminders that are easy to miss."
+    },
+    {
+        question: "A sales VP wants to ensure that new hire onboarding plans include a checklist of store visit training tasks. What is the most efficient solution?",
+        options: [
+        "Use Action Plan Templates linked to employee onboarding records",
+        "Track new hire onboarding tasks in spreadsheets",
+        "Ask team leads to define onboarding tasks individually",
+        "Provide onboarding details informally over calls"
+        ],
+        answer: 0,
+        explanation: "Linking Action Plans to onboarding records standardizes training steps and automates task creation. Spreadsheets, informal calls, or team-lead defined tasks are inconsistent and error-prone."
+    },
+    {
+        question: "A distributor wants to automate equipment installation tasks whenever a store purchases refrigeration units. What is the best approach?",
+        options: [
+        "Use Action Plan Templates tied to refrigeration unit purchase records",
+        "Ask reps to create installation tasks manually",
+        "Depend on post-purchase phone calls for instructions",
+        "Log equipment installation only after completion"
+        ],
+        answer: 0,
+        explanation: "Action Plans linked to purchase events ensure installation tasks are triggered automatically. Manual task creation, calls, or post-completion logging are inefficient and reactive."
+    },
+  // ...Continue adding all questions in this format...
+ ];
+
+
+    // --- Quiz Logic ---
+    let current = 0, score = 0;
+    const quizDiv = document.getElementById('quiz');
+    const scoreDiv = document.getElementById('score');
+    const nextBtn = document.getElementById('nextBtn');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function showQuestion() {
+      scoreDiv.textContent = '';
+      nextBtn.style.display = 'none';
+      restartBtn.style.display = 'none';
+      const q = questions[current];
+      let html = `<div class="progress">Question ${current + 1} of ${questions.length}</div>`;
+      html += `<div class="question">${q.question}</div><ul class="options">`;
+      q.options.forEach((opt, i) => {
+        html += `<li><label><input type="radio" name="option" value="${i}"> ${opt}</label></li>`;
+      });
+      html += '</ul><div class="feedback" id="feedback"></div><div class="explanation" id="explanation"></div>';
+      quizDiv.innerHTML = html;
+      document.querySelectorAll('input[name="option"]').forEach(input => {
+        input.addEventListener('change', checkAnswer);
+      });
+    }
+
+    function checkAnswer(e) {
+      const selected = parseInt(e.target.value);
+      const q = questions[current];
+      const feedback = document.getElementById('feedback');
+      const explanation = document.getElementById('explanation');
+      if (Array.isArray(q.answer)) {
+        // For multi-answer questions (e.g., "A, B")
+        if (q.answer.includes(selected)) {
+          feedback.textContent = 'Correct!';
+          feedback.style.color = 'green';
+          score++;
+        } else {
+          feedback.textContent = 'Incorrect!';
+          feedback.style.color = 'red';
+        }
+      } else {
+        if (selected === q.answer) {
+          feedback.textContent = 'Correct!';
+          feedback.style.color = 'green';
+          score++;
+        } else {
+          feedback.textContent = 'Incorrect!';
+          feedback.style.color = 'red';
+        }
+      }
+      explanation.textContent = q.explanation;
+      document.querySelectorAll('input[name="option"]').forEach(input => input.disabled = true);
+      nextBtn.style.display = 'inline-block';
+      if (current === questions.length - 1) {
+        nextBtn.textContent = 'Show Score';
+      } else {
+        nextBtn.textContent = 'Next Question';
+      }
+    }
+
+    nextBtn.onclick = function() {
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        quizDiv.innerHTML = '';
+        scoreDiv.textContent = `Quiz complete! Your score: ${score} out of ${questions.length}`;
+        restartBtn.style.display = 'inline-block';
+        nextBtn.style.display = 'none';
+      }
+    };
+
+    restartBtn.onclick = function() {
+      current = 0;
+      score = 0;
+      showQuestion();
+    };
+
+    // Start quiz
+    showQuestion();
+  </script>
+</body>
+</html>
