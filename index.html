@@ -22,46 +22,80 @@
     <h1>CG Certification Practice Quiz</h1>
   <div id="quiz"></div>
   <div class="score" id="score"></div>
+  <div style="margin-bottom:15px;">
+    <label for="startQ">Start from question #: </label>
+    <input type="number" id="startQ" min="1" max="100" style="width:60px;">
+    <button id="startBtn">Start</button>
+  </div>
+  <button id="backBtn" style="display:none;">Back</button>
   <button id="submitBtn" style="display:none;">Submit</button>
   <button id="nextBtn" style="display:none;">Next Question</button>
   <button id="restartBtn" style="display:none;">Restart Quiz</button>
   </div>
   <script src="questions.js"></script>
   <script>
-    let current = 0;
-    let score = 0;
-    const quizDiv = document.getElementById('quiz');
-    const scoreDiv = document.getElementById('score');
-    const nextBtn = document.getElementById('nextBtn');
-    const restartBtn = document.getElementById('restartBtn');
-    const submitBtn = document.getElementById('submitBtn');
+  let current = 0;
+  let score = 0;
+  let wrongAnswers = [];
+  const quizDiv = document.getElementById('quiz');
+  const scoreDiv = document.getElementById('score');
+  const nextBtn = document.getElementById('nextBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const backBtn = document.getElementById('backBtn');
+  const startBtn = document.getElementById('startBtn');
+  const startQ = document.getElementById('startQ');
 
     function showScore() {
       scoreDiv.textContent = `Score: ${score} / ${questions.length}`;
+    }
+
+    function showWrongAnswers() {
+      if (wrongAnswers.length === 0) return '';
+      let html = '<h2>Questions to Practice Again:</h2><ol>';
+      wrongAnswers.forEach(idx => {
+        const q = questions[idx];
+        html += `<li>Q${idx+1}: ${q.question}<br>Correct Answer: ${Array.isArray(q.answer) ? q.answer.map(i=>q.options[i]).join(', ') : q.options[q.answer]}<br>Explanation: ${q.explanation || ''}</li>`;
+      });
+      html += '</ol>';
+      return html;
     }
 
     function showQuestion() {
       nextBtn.style.display = 'none';
       restartBtn.style.display = 'none';
       submitBtn.style.display = 'inline-block';
+      backBtn.style.display = current > 0 ? 'inline-block' : 'none';
       quizDiv.innerHTML = '';
       const q = questions[current];
-      let html = `<div class="progress">Question ${current + 1} of ${questions.length}</div>`;
-      html += `<div class="question">${q.question}</div>`;
-      html += `<ul class="options">`;
+      let html = `<div class=\"progress\">Question ${current + 1} of ${questions.length}</div>`;
+      html += `<div class=\"question\">${q.question}</div>`;
+      html += `<ul class=\"options\">`;
+      const isMulti = Array.isArray(q.answer);
       q.options.forEach((opt, i) => {
-        html += `<li><label><input type="checkbox" name="option" value="${i}"> ${opt}</label></li>`;
+        if (isMulti) {
+          html += `<li><label><input type=\"checkbox\" name=\"option\" value=\"${i}\"> ${opt}</label></li>`;
+        } else {
+          html += `<li><label><input type=\"radio\" name=\"option\" value=\"${i}\"> ${opt}</label></li>`;
+        }
       });
       html += `</ul>`;
-      html += `<div class="feedback" id="feedback" style="display:none;"></div>`;
-      html += `<div class="explanation" id="explanation" style="display:none;"></div>`;
+      html += `<div class=\"feedback\" id=\"feedback\" style=\"display:none;\"></div>`;
+      html += `<div class=\"correctAns\" id=\"correctAns\" style=\"display:none; color:#007700;\"></div>`;
+      html += `<div class=\"explanation\" id=\"explanation\" style=\"display:none;\"></div>`;
       quizDiv.innerHTML = html;
       showScore();
     }
 
     submitBtn.onclick = function() {
       const q = questions[current];
-      const selected = Array.from(document.querySelectorAll('input[name="option"]:checked')).map(el => parseInt(el.value));
+      let selected;
+      if (Array.isArray(q.answer)) {
+        selected = Array.from(document.querySelectorAll('input[name=\"option\"]:checked')).map(el => parseInt(el.value));
+      } else {
+        const radio = document.querySelector('input[name=\"option\"]:checked');
+        selected = radio ? [parseInt(radio.value)] : [];
+      }
       let correct = false;
       let correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
       correctAnswers = correctAnswers.map(Number);
@@ -69,18 +103,30 @@
       if (selected.length === correctAnswers.length && selected.every(v => correctAnswers.includes(v)) && correctAnswers.every(v => selected.includes(v))) {
         correct = true;
         score++;
+        // Remove from wrongAnswers if previously wrong
+        wrongAnswers = wrongAnswers.filter(idx => idx !== current);
+      } else {
+        // Add to wrongAnswers if not already there
+        if (!wrongAnswers.includes(current)) wrongAnswers.push(current);
       }
       // Show feedback
       const feedbackDiv = document.getElementById('feedback');
       feedbackDiv.style.display = 'block';
       feedbackDiv.textContent = correct ? 'Correct!' : 'Wrong!';
       feedbackDiv.style.color = correct ? '#007700' : '#bb2222';
+      // Show correct answer if wrong
+      const correctAnsDiv = document.getElementById('correctAns');
+      if (!correct) {
+        let ansText = Array.isArray(q.answer) ? q.answer.map(i=>q.options[i]).join(', ') : q.options[q.answer];
+        correctAnsDiv.style.display = 'block';
+        correctAnsDiv.textContent = `Correct Answer: ${ansText}`;
+      }
       // Show explanation
       const explanationDiv = document.getElementById('explanation');
       explanationDiv.style.display = 'block';
       explanationDiv.textContent = q.explanation ? `Explanation: ${q.explanation}` : '';
-      // Disable checkboxes
-      document.querySelectorAll('input[name="option"]').forEach(el => el.disabled = true);
+      // Disable inputs
+      document.querySelectorAll('input[name=\"option\"]').forEach(el => el.disabled = true);
       submitBtn.style.display = 'none';
       nextBtn.style.display = 'inline-block';
       if (current === questions.length - 1) {
@@ -96,19 +142,39 @@
       if (current < questions.length) {
         showQuestion();
       } else {
-        quizDiv.innerHTML = '';
+        quizDiv.innerHTML = showWrongAnswers();
         scoreDiv.textContent = `Quiz complete! Your score: ${score} / ${questions.length}`;
         restartBtn.style.display = 'inline-block';
         nextBtn.style.display = 'none';
         submitBtn.style.display = 'none';
+        backBtn.style.display = 'none';
       }
     };
 
     restartBtn.onclick = function() {
       current = 0;
       score = 0;
+      wrongAnswers = [];
       showQuestion();
       submitBtn.style.display = 'inline-block';
+    };
+
+    backBtn.onclick = function() {
+      if (current > 0) {
+        current--;
+        showQuestion();
+      }
+    };
+
+    startBtn.onclick = function() {
+      let val = parseInt(startQ.value);
+      if (!isNaN(val) && val >= 1 && val <= questions.length) {
+        current = val - 1;
+        score = 0;
+        wrongAnswers = [];
+        showQuestion();
+        submitBtn.style.display = 'inline-block';
+      }
     };
 
     // Start quiz
