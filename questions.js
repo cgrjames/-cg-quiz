@@ -1289,16 +1289,24 @@ window.questions = [
       "Ask reps to mark premium display checks manually during visits",
       "Use a single generic compliance form for all displays",
       "Ignore premium displays and track only standard shelf layouts",
-      "Overall explanation",
-      "Separate templates ensure premium and standard displays are tracked independently, enabling accurate reporting. Manual marking or generic forms cause inconsistent data, and ignoring premium displays leaves compliance gaps.",
-      "A brand manager wants to analyze compliance by comparing actual shelf placement to the desired layout across multiple store formats. How should this be achieved?",
+    ],
+    "answer": 0,
+    "explanation": "Overall explanation Separate templates ensure premium and standard displays are tracked independently, enabling accurate reporting. Manual marking or generic forms cause inconsistent data, and ignoring premium displays leaves compliance gaps."
+  },
+  {
+    "question": "A brand manager wants to analyze compliance by comparing actual shelf placement to the desired layout across multiple store formats. How should this be achieved?",
+    "options": [
       "Ask reps to visually estimate compliance during visits",
       "Capture shelf photos and compare them manually post-visit",
       "Use Planogram Check tasks linked to format-specific Planogram Templates with compliance scoring",
       "Focus only on product presence, not placement accuracy",
-      "Overall explanation",
-      "Planogram Check tasks linked to format-specific templates enable structured scoring and reporting. Visual estimates, manual photo reviews, or ignoring placement accuracy limit data quality and insight.",
-      "A retailer wants to add additional seasonal products to existing planograms for the holiday period without creating new templates. How can this be done efficiently?",
+    ],
+    "answer": 2,
+    "explanation": "Overall explanation Planogram Check tasks linked to format-specific templates enable structured scoring and reporting. Visual estimates, manual photo reviews, or ignoring placement accuracy limit data quality and insight."
+  },
+  {
+    "question": "A retailer wants to add additional seasonal products to existing planograms for the holiday period without creating new templates. How can this be done efficiently?",
+    "options": [
       "Update existing Planogram Check templates dynamically to include seasonal products",
       "Require reps to manually note seasonal items during checks",
       "Create completely new templates for every season",
