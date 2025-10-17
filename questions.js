@@ -1710,10 +1710,13 @@ window.questions = [
       "Replace production scheduling logic immediately",
       "Track pilot results manually using spreadsheets",
       "Add optional fields to existing visit records for AI outputs only",
-      "Asnwer: A",
-      "Overall explanation",
-      "Using a sandbox or pilot org ensures safe, isolated testing and measurable results. Replacing production logic, spreadsheets, or optional fields compromises control, accuracy, or risk mitigation.",
-      "A field manager wants to ensure that all top-tier stores are visited every week while smaller stores are visited biweekly. What is the best way to configure this?",
+    ],
+    "answer": 0,
+    "explanation": "Overall explanation Using a sandbox or pilot org ensures safe, isolated testing and measurable results. Replacing production logic, spreadsheets, or optional fields compromises control, accuracy, or risk mitigation."
+  },
+  {
+    "question":"A field manager wants to ensure that all top-tier stores are visited every week while smaller stores are visited biweekly. What is the best way to configure this?",
+    "options": [
       "Use Visit Frequency Rules with account segmentation to drive weekly and biweekly scheduling",
       "Manually create visits for top-tier stores every week",
       "Create a separate Excel file to track visit frequencies",
