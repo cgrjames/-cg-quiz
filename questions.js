@@ -1842,15 +1842,19 @@ window.questions = [
       "Provide direct database access to Salesforce",
       "Share weekly spreadsheets via email",
       "Use unsecured public links for data sharing",
-      "Overall explanation",
-      "Experience Cloud with APIs enables secure, role-based access, unlike direct DB access, email spreadsheets, or public links, which create security and compliance issues.",
-      "A manager needs to integrate Salesforce orders with an external warehouse system for real-time order fulfillment. Which solution is recommended?",
+    ],
+    "answer": 0,
+    "explanation": "Overall explanation Experience Cloud with APIs enables secure, role-based access, unlike direct DB access, email spreadsheets, or public links, which create security and compliance issues."
+  },
+  {
+    "question": "A manager needs to integrate Salesforce orders with an external warehouse system for real-time order fulfillment. Which solution is recommended?",
+    "options": [
+      "Use real-time integration through middleware such as MuleSoft or external APIs",
       "Handle order processing manually and upload results monthly",
       "Export order data via reports and manually import into the warehouse system",
-      "Use real-time integration through middleware such as MuleSoft or external APIs",
       "Use Chatter posts for warehouse notifications"
     ],
-    "answer": 2,
+    "answer": 0,
     "explanation": "Overall explanation Middleware ensures seamless, automated order sync, unlike manual imports, monthly uploads, or unstructured Chatter notifications that lack automation and accuracy."
   },
   {

@@ -96,6 +96,14 @@
         const radio = document.querySelector('input[name=\"option\"]:checked');
         selected = radio ? [parseInt(radio.value)] : [];
       }
+      // Prevent submit if nothing selected
+      if (!selected || selected.length === 0) {
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.style.display = 'block';
+        feedbackDiv.textContent = 'Please select at least one answer before submitting.';
+        feedbackDiv.style.color = '#bb2222';
+        return;
+      }
       let correct = false;
       let correctAnswers = Array.isArray(q.answer) ? q.answer : [q.answer];
       correctAnswers = correctAnswers.map(Number);
