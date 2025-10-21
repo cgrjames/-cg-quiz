@@ -1986,9 +1986,14 @@ window.questions = [
       "Use manual analysis outside Salesforce using offline tools",
       "Create combined Analytics Dashboards leveraging Planogram Check data and sales performance data",
       "Only track shelf share visually without reporting",
-      "Overall explanation",
-      "Combined dashboards enable correlation between shelf share and sales, ensuring actionable insights. Ignoring shelf share, manual offline analysis, or purely visual checks limit decision-making power.",
-      "A brand manager wants to receive automatic alerts when any store falls below a compliance threshold of 80% for promotion execution. What’s the best configuration?",
+    ],
+    "answer": 2,
+    "explanation": "Overall explanation Combined dashboards enable correlation between shelf share and sales, ensuring actionable insights. Ignoring shelf share, manual offline analysis, or purely visual checks limit decision-making power.",
+
+  },
+  {
+    "question": "A brand manager wants to receive automatic alerts when any store falls below a compliance threshold of 80% for promotion execution. What’s the best configuration?",
+    "options": [
       "Your answer is incorrect",
       "Configure dashboard subscriptions or report-based alerts triggered at threshold breaches",
       "Require manual daily checks of compliance reports",
