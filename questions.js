@@ -2196,8 +2196,9 @@ window.questions = [
       "Leverage AI-driven image recognition for shelf compliance"
     ],
     "answer": [
-      0,
-      2
+      1,
+      2,
+      3
     ],
     "explanation": "Overall explanation AI-driven image recognition and automated photo capture reduce manual effort and provide objective compliance data, unlike Excel-based manual checklists which are error-prone and time-consuming."
   },
